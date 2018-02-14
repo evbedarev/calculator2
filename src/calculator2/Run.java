@@ -8,8 +8,9 @@ public class Run {
     Calculate calculate = calcExpr('*');
     ValueStorage valueStorage = new ValueStorage();
     Scanner in  = new Scanner(System.in);
+
     CheckValue checkValue = new CheckValue();
-    String[] arr;
+
 
     void run () {
         String input = in.nextLine();
@@ -37,5 +38,26 @@ public class Run {
         else  if (oper == '-') { return new Substr();}
         else return null;
     }
+
+}
+
+//Проверяет первое выражение или нет и запускает соответствующий метод.
+class VerifyAtFirstTimeOrNot {
+    String[] arr;
+    static boolean atFirstTime = true;
+
+
+    VerifyLaunchAtFirstTime verifyLaunchAtFirstTime = verify();
+
+    public String[] launch(String cmd) {
+        arr = verify().check(cmd);
+
+    }
+
+    static VerifyLaunchAtFirstTime verify () {
+        if (atFirstTime) {return new CheckValue();}
+        else return new CheckSecondValue();
+    }
+
 
 }
