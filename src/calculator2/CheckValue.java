@@ -33,7 +33,7 @@ class CheckValue implements VerifyLaunchAtFirstTime{
 
 
     //получает паттерн и колличество групп в паттерне, строку в которой будет производится поиск и сообщение ошибки
-    String[] retArr(Pattern pat1, int val, String cmd, String msg) {
+    public String[] retArr(Pattern pat1, int val, String cmd, String msg) {
 
         String[] groups = new String[4];
         Matcher m = pat1.matcher(cmd);

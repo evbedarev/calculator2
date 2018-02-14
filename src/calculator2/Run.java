@@ -5,21 +5,21 @@ import java.util.Scanner;
 
 public class Run {
 
-    Calculate calculate = calcExpr('*');
-    ValueStorage valueStorage = new ValueStorage();
-    Scanner in  = new Scanner(System.in);
-
-    CheckValue checkValue = new CheckValue();
-
+    private Calculate calculate = calcExpr('*');  //Интерфейс вычислений
+    private ValueStorage valueStorage = new ValueStorage(); //Класс хранения результата
+    private Scanner in  = new Scanner(System.in);
+    VerifyAtFirstTimeOrNot verify = new VerifyAtFirstTimeOrNot(); //интерфейс проверки валидности выражения и какой раз производят вычисления.
+    private String[] arr;
 
     void run () {
         String input = in.nextLine();
-
+        arr = verify.launch(input);
 
         expr(22.2,33.5,'q');
         if (calculate!=null) { expr(2.0,'/');}
         System.out.println(valueStorage.getResult());
     }
+
 
     void expr(Double num, char operator) {
         calculate = calcExpr(operator);
@@ -42,22 +42,22 @@ public class Run {
 }
 
 //Проверяет первое выражение или нет и запускает соответствующий метод.
+
 class VerifyAtFirstTimeOrNot {
-    String[] arr;
     static boolean atFirstTime = true;
 
-
-    VerifyLaunchAtFirstTime verifyLaunchAtFirstTime = verify();
+    VerifyLaunchAtFirstTime verifyLaunchAtFirstTime = verify("");
 
     public String[] launch(String cmd) {
-        arr = verify().check(cmd);
-
+        return verify(cmd).check(cmd);
     }
 
-    static VerifyLaunchAtFirstTime verify () {
+    static VerifyLaunchAtFirstTime verify (String cmd) {
         if (atFirstTime) {return new CheckValue();}
-        else return new CheckSecondValue();
+        else
+            if (cmd.matches(" *[*+\\-/] *((?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)$")) {
+                return new CheckSecondValue();
+            } else return new CheckValue();
     }
-
 
 }
