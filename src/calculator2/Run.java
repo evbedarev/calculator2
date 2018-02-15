@@ -18,9 +18,10 @@ public class Run {
             input = in.nextLine();
             if (input.equals("")) {break;}
             if (valueStorage.getRunAtFirstTime()) {
+                valueStorage.setRunAtFirstTime(false);
+                System.out.println("First Time");
                 runFirstTime(input);
             } else {runSecondTime(input);}
-
         }
     }
 

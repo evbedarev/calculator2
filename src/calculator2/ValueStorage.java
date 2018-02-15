@@ -4,7 +4,7 @@ import sun.invoke.util.VerifyAccess;
 
 public class ValueStorage {
     private Double result;
-    private boolean runAtFirstTime = false;
+    private boolean runAtFirstTime = true;
     char operator;
 
    public Double getResult () {
@@ -29,7 +29,6 @@ class Plus implements Calculate{
     public Double calc (Double numOne, Double numTwo) {
         return numOne + numTwo;
     }
-
 }
 
 class Multi implements Calculate{
