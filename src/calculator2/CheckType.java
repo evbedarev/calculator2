@@ -4,14 +4,6 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class CheckType {
-    String numOne;
-    String numTwo;
-    Long numL;
-    char oper[];
-
-
-//    private Double verifyType(String num) {
-
 
 }
 
@@ -64,6 +56,7 @@ class CheckTypeHex extends CheckTypeBin {
 
     public Double check(String num) {
         stringNum = checkValue.retArr(Pattern.compile("0x([0-9a-fA-F]+)"),2, num, "Error")[0];
+        System.out.println(stringNum);
         return isMaxValue(Long.parseLong(stringNum,16));
     }
 }

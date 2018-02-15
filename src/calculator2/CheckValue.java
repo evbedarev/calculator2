@@ -33,7 +33,7 @@ class CheckValue {
 
     public String[] checkSecondValue (String cmd) {
         String[] groups = new String[4];
-        Pattern pattern = Pattern.compile("^ *([*+\\-/]) *((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?))");
+        Pattern pattern = Pattern.compile("^ *([*+\\-/]) *((?:.)|(?:0[0-7]+)|(?:0b[0-1]+)|(?:0x[0-9a-fA-F]+)|(?:(?:[-+])?\\d+\\.?\\d*(?:[lLfF])?))$");
 
         groups = retArr(pattern, 3, cmd, "Error, wrong expr at second nuber or mathematical operation");
         if (groups[0].matches("Error.*")) {
