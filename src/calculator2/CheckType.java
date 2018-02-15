@@ -10,58 +10,69 @@ public class CheckType {
     char oper[];
 
 
-    private Double verifyType(String num) {
-        double firstNum;
+//    private Double verifyType(String num) {
 
-        if (num.matches(".*[fF]$")) {
-            firstNum = Float.valueOf(num);
-            return firstNum;
 
-        } else if (num.matches(".*[lL]$")) {
-            firstNum = Long.parseLong(num,10); //Удаляем в конце lL
-            return firstNum;
-        } else {
-            firstNum = Double.valueOf(num);
-            return firstNum;
-        }
+}
+
+class CheckTypeFloat implements VerifyType{
+    String stringNum;
+
+    public Double check(String num) {
+        return isMaxValue(Float.valueOf(num).longValue());
     }
 
-
-//    private String splitArray(String[] arr) {
-//        ArrayList<Double> nums= new ArrayList<Double>();
-//        for (String s:arr) {
-//            if (s.matches("(?:[+-])?\\d+\\.?\\d+")) {
-//                this.num = verifyType(s);
-//            } else if (s.matches("[*/\\-+]")){
-//                this.oper = s.toCharArray();
-//            }
-//
-//        }
-//    }
-
-    private Double isMaxValue(String num) {
-        CheckValue parse = new CheckValue();
-
-        if (num.matches("(?:[+-])?\\d+\\.\\d+(?:[lLfF])?$")) {
-            num = parse.retArr(Pattern.compile("((?:[+-])?\\d+)\\.\\d+(?:[lLFf]$)?"),2, num, "Error")[1];
-            return compare(num);
-
+    Double isMaxValue(Long num) {
+        if (num < Double.MAX_VALUE) {
+            return num.doubleValue();
         } else {
-            numL = Long.parseLong(num);
-            return compare(num);
+            return Double.MAX_VALUE; //Must be exception
         }
 
     }
+}
 
-    private Double compare(String num) {
-        numL = Long.parseLong(num);
+class CheckTypeNum extends CheckTypeFloat {
 
-        if (numL < Double.MAX_VALUE) {
-            return Double.parseDouble(num);
-        } else {
-            return 0.0;
-        }
+    public Double check(String num) {
+        return isMaxValue(Long.parseLong(num,10));
+    }
+}
+
+class CheckTypeLong extends CheckTypeFloat {
+    public Double check(String num) {
+        return isMaxValue(Long.parseLong(num.substring(0, num.length() - 1))); //Удаляем в конце lL
+    }
+}
+
+class CheckTypeChar extends CheckTypeFloat {
+    public Double check(String num) {
+        return isMaxValue((long)num.charAt(0)); //Удаляем в конце lL
+    }
+}
+
+class CheckTypeBin extends CheckTypeFloat {
+    CheckValue checkValue = new CheckValue();
+
+    public Double check(String num) {
+        stringNum = checkValue.retArr(Pattern.compile("0b([01]+)"),2, num, "Error")[0];
+        return isMaxValue(Long.parseLong(stringNum,2));
+    }
+}
+
+class CheckTypeHex extends CheckTypeBin {
+
+    public Double check(String num) {
+        stringNum = checkValue.retArr(Pattern.compile("0x([0-9a-fA-F]+)"),2, num, "Error")[0];
+        return isMaxValue(Long.parseLong(stringNum,16));
+    }
+}
+
+class CheckTypeOcta extends CheckTypeBin {
+
+    public Double check(String num) {
+        stringNum = checkValue.retArr(Pattern.compile("0([0-7]+)"),2, num, "Error")[0];
+        return isMaxValue(Long.parseLong(stringNum,8));
 
     }
-
 }

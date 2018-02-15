@@ -4,6 +4,7 @@ import sun.invoke.util.VerifyAccess;
 
 public class ValueStorage {
     private Double result;
+    private boolean runAtFirstTime = false;
     char operator;
 
    public Double getResult () {
@@ -13,6 +14,14 @@ public class ValueStorage {
    public void setResult (Double result) {
        this.result=result;
    }
+
+   public void setRunAtFirstTime(boolean runAtFirstTime) {
+       this.runAtFirstTime = runAtFirstTime;
+   }
+
+    public boolean getRunAtFirstTime() {
+        return runAtFirstTime;
+    }
 }
 
 class Plus implements Calculate{

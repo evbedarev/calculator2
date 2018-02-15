@@ -1,23 +1,59 @@
 package calculator2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Run {
-
-    private Calculate calculate = calcExpr('*');  //Интерфейс вычислений
+    private Double numOne;
+    private char mathOper;
+    private Calculate calculate;  //Интерфейс вычислений
     private ValueStorage valueStorage = new ValueStorage(); //Класс хранения результата
     private Scanner in  = new Scanner(System.in);
-    VerifyAtFirstTimeOrNot verify = new VerifyAtFirstTimeOrNot(); //интерфейс проверки валидности выражения и какой раз производят вычисления.
+//    private VerifyType checkType;
+    CheckValue checkValue = new CheckValue();
     private String[] arr;
 
     void run () {
         String input = in.nextLine();
-        arr = verify.launch(input);
+        arr = checkValue.check(input);
 
-        expr(22.2,33.5,'q');
-        if (calculate!=null) { expr(2.0,'/');}
-        System.out.println(valueStorage.getResult());
+        for (; ;) {
+            if (valueStorage.getRunAtFirstTime()) {
+                runFirstTime(input);
+            } else {runSecondTime(input);}
+            input = in.nextLine();
+        }
+    }
+
+    void runFirstTime(String input) {
+        arr = checkValue.check(input);
+        if (!(arr[0].matches("Error.*"))) {
+            numOne = checkType(arr[0]).check(arr[0]);
+            Double numTwo = checkType(arr[2]).check(arr[2]);
+            mathOper = arr[1].charAt(0);
+            expr(numOne, numTwo, mathOper);
+            System.out.println(arr[0] + arr[1] + arr[2] + "=" + valueStorage.getResult());
+        } else {
+            System.out.println(arr[0]);
+        }
+    }
+
+    void runSecondTime(String input) {
+
+        arr = checkValue.checkSecondValue(input);
+        if (arr[0].matches("[*/+\\-]")) {
+            if (!(arr[0].matches("Error.*"))) {
+                numOne = checkType(arr[1]).check(arr[1]);
+                mathOper = arr[0].charAt(0);
+                expr(numOne, mathOper);
+                System.out.println(valueStorage.getResult() + arr[0] + arr[1] + "=" + valueStorage.getResult());
+            } else {
+                System.out.println(arr[0]);
+            }
+        }
+
+        else {runFirstTime(input);}
     }
 
 
@@ -31,7 +67,7 @@ public class Run {
         if (calculate!=null) { valueStorage.setResult(calculate.calc(numOne,numTwo)); }
     }
 
-    static Calculate calcExpr(char oper) {
+    private static Calculate calcExpr(char oper) {
         if (oper == '+') { return new Plus();}
         else if (oper == '*') { return new Multi();}
         else if (oper == '/') { return new Dev();}
@@ -39,25 +75,16 @@ public class Run {
         else return null;
     }
 
-}
-
-//Проверяет первое выражение или нет и запускает соответствующий метод.
-
-class VerifyAtFirstTimeOrNot {
-    static boolean atFirstTime = true;
-
-    VerifyLaunchAtFirstTime verifyLaunchAtFirstTime = verify("");
-
-    public String[] launch(String cmd) {
-        return verify(cmd).check(cmd);
+    static VerifyType checkType(String num) {
+        if (num.matches("\\d+\\.?\\d*[fF]$")) { return new CheckTypeFloat();}
+        else if (num.matches("0[0-7]+$")) {return new CheckTypeOcta();}
+        else if (num.matches("0b[0-1]+$")) {return new CheckTypeBin();}
+        else if (num.matches("0x[0-9a-fA-F]+$")) {return new CheckTypeHex();}
+        else if (num.matches(".*[lL]$")) {return new CheckTypeLong();}
+        else if (num.matches("[^0-9]")) {return new CheckTypeChar();}
+        else {return new CheckTypeNum();}
     }
 
-    static VerifyLaunchAtFirstTime verify (String cmd) {
-        if (atFirstTime) {return new CheckValue();}
-        else
-            if (cmd.matches(" *[*+\\-/] *((?:[-+])?\\d+\\.?\\d*(?:[lLfF])?)$")) {
-                return new CheckSecondValue();
-            } else return new CheckValue();
-    }
+
 
 }
