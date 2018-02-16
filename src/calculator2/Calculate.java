@@ -1,5 +1,6 @@
 package calculator2;
 
+@FunctionalInterface
 public interface Calculate {
-    public Double calc (Double numOne, Double numTwo);
+     Double calc (Double numOne, Double numTwo);
 }

@@ -14,7 +14,7 @@ class CheckTypeFloat implements VerifyType{
         return isMaxValue(Float.valueOf(num).longValue());
     }
 
-    Double isMaxValue(Long num) {
+    static Double isMaxValue(Long num) {
         if (num < Double.MAX_VALUE) {
             return num.doubleValue();
         } else {
