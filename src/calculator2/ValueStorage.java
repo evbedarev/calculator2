@@ -1,6 +1,6 @@
 package calculator2;
 
-import sun.invoke.util.VerifyAccess;
+import calculator2.calculate.Calculate;
 
 public class ValueStorage {
     private Double result;
@@ -24,27 +24,3 @@ public class ValueStorage {
     }
 }
 
-class Plus implements Calculate{
-
-    public Double calc (Double numOne, Double numTwo) {
-        return numOne + numTwo;
-    }
-}
-
-class Multi implements Calculate{
-    public Double calc (Double numOne, Double numTwo) {
-        return numOne * numTwo;
-    }
-}
-
-class Dev implements Calculate{
-    public Double calc (Double numOne, Double numTwo) {
-        return numOne / numTwo;
-    }
-}
-
-class Substr implements Calculate{
-    public Double calc (Double numOne, Double numTwo) {
-        return numOne / numTwo;
-    }
-}

@@ -1,4 +1,7 @@
 package calculator2;
+import calculator2.calculate.*;
+import calculator2.checktype.*;
+
 import java.util.Scanner;
 
 public class Run {
@@ -6,8 +9,7 @@ public class Run {
     Double numTwo;
     private char mathOper;
     private Calculate calculate;  //Интерфейс вычислений
-    private ValueStorage valueStorage = new ValueStorage();
-
+    private ValueStorage valueStorage = new ValueStorage(); //Класс хранения результата и вычислений
     private Scanner in  = new Scanner(System.in);
     CheckValue checkValue = new CheckValue();
     private String[] arr;
@@ -20,7 +22,6 @@ public class Run {
             if (input.equals("")) {break;}
             if (valueStorage.getRunAtFirstTime()) {
                 valueStorage.setRunAtFirstTime(false);
-                System.out.println("First Time");
                 runFirstTime(input);
             } else {runSecondTime(input);}
         }
@@ -54,6 +55,36 @@ public class Run {
         }
         else {runFirstTime(input);}
     }
+
+
+    void expr(Double num, char operator) {
+        calculate = calcExpr(operator);
+        if (calculate!=null) { valueStorage.setResult(calculate.calc(valueStorage.getResult(),num)); }
+    }
+
+    void expr(Double numOne, Double numTwo, char operator) {
+        calculate = calcExpr(operator);
+        if (calculate!=null) { valueStorage.setResult(calculate.calc(numOne,numTwo)); }
+    }
+
+    private static Calculate calcExpr(char oper) {
+        if (oper == '+') { return new Plus();}
+        else if (oper == '*') { return new Multi();}
+        else if (oper == '/') { return new Dev();}
+        else  if (oper == '-') { return new Substr();}
+        else return null;
+    }
+
+    static VerifyType checkType(String num) {
+        if (num.matches("\\d+\\.?\\d*[fF]$")) { return new CheckTypeFloat();}
+        else if (num.matches("^0[0-7]+$")) {return new CheckTypeOcta();}
+        else if (num.matches("^0b[0-1]+$")) {return new CheckTypeBin();}
+        else if (num.matches("^0x[0-9a-fA-F]+$")) {return new CheckTypeHex();}
+        else if (num.matches("^.*[lL]$")) {return new CheckTypeLong();}
+        else if (num.matches("^[^0-9]$")) {return new CheckTypeChar();}
+        else {return new CheckTypeNum();}
+    }
+
 
 
 }
