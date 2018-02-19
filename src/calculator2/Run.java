@@ -33,7 +33,7 @@ public class Run {
             numOne = checkType(arr[0]).check(arr[0]);
             numTwo = checkType(arr[2]).check(arr[2]);
             mathOper = arr[1].charAt(0);
-            expr(numOne, numTwo, mathOper);
+            valueStorage.setResult(expr(mathOper).calc(numOne,numTwo));
             System.out.println(arr[0] + arr[1] + arr[2] + "=" + valueStorage.getResult());
         } else {
             System.out.println(arr[0]);
@@ -47,7 +47,7 @@ public class Run {
             if (!(arr[0].matches("Error.*"))) {
                 numOne = checkType(arr[1]).check(arr[1]);
                 mathOper = arr[0].charAt(0);
-                expr(numOne, mathOper);
+                valueStorage.setResult(expr(mathOper).calc(numOne,valueStorage));
                 System.out.println(valueStorage.getResult() + arr[0] + arr[1] + "=" + valueStorage.getResult());
             } else {
                 System.out.println(arr[0]);
@@ -57,23 +57,15 @@ public class Run {
     }
 
 
-    void expr(Double num, char operator) {
-        calculate = calcExpr(operator);
-        if (calculate!=null) { valueStorage.setResult(calculate.calc(valueStorage.getResult(),num)); }
+    CalculateExpr.Operation expr (char mathOper) {
+        if (mathOper=='+') return CalculateExpr.Operation.PLUS;
+        else if (mathOper=='-') return CalculateExpr.Operation.MINUS;
+        else if (mathOper=='*') return CalculateExpr.Operation.MULTI;
+        else return CalculateExpr.Operation.DEV;
     }
 
-    void expr(Double numOne, Double numTwo, char operator) {
-        calculate = calcExpr(operator);
-        if (calculate!=null) { valueStorage.setResult(calculate.calc(numOne,numTwo)); }
-    }
 
-    private static Calculate calcExpr(char oper) {
-        if (oper == '+') { return new Plus();}
-        else if (oper == '*') { return new Multi();}
-        else if (oper == '/') { return new Dev();}
-        else  if (oper == '-') { return new Substr();}
-        else return null;
-    }
+
 
     static VerifyType checkType(String num) {
         if (num.matches("\\d+\\.?\\d*[fF]$")) { return new CheckTypeFloat();}

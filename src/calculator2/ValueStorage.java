@@ -5,7 +5,6 @@ import calculator2.calculate.Calculate;
 public class ValueStorage {
     private Double result;
     private boolean runAtFirstTime = true;
-    char operator;
 
    public Double getResult () {
        return result;
